@@ -1,53 +1,200 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <title>Магазин</title>
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин Code Warrior</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .shop-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        .balance {
+            font-size: 20px;
+            margin: 20px 0;
+        }
+        #coins {
+            font-weight: bold;
+            color: #f39c12;
+        }
+        .item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        button:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #3498db;
+            text-decoration: none;
+            border: 2px solid #3498db;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        .back-btn:hover {
+            background: #3498db;
+            color: white;
+        }
+        .firework-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+    </style>
 </head>
 <body>
-  <div class="lobby-container">
-    <h1>Магазин</h1>
-    <p>Ваши монеты: <span id="coins">0</span></p>
-    <button onclick="buyHint()">Купить подсказку (20 монет)</button>
-    <button onclick="buyFirework()">Купить фейерверк (15 монет)</button>
-    <a href="./index.html" class="back-btn">Назад в игру</a> <!-- Исправленная ссылка! -->
-  </div>
+    <div class="shop-container">
+        <h1>Магазин Code Warrior</h1>
+        <div class="balance">Ваши монеты: <span id="coins">0</span></div>
+        
+        <div class="item">
+            <div>
+                <h3>Подсказка</h3>
+                <p>Показывает часть решения примера</p>
+            </div>
+            <button id="buy-hint" onclick="buyHint()">20 монет</button>
+        </div>
+        
+        <div class="item">
+            <div>
+                <h3>Фейерверк</h3>
+                <p>Красивый эффект + шанс 5% получить подсказку</p>
+            </div>
+            <button id="buy-firework" onclick="buyFirework()">15 монет</button>
+        </div>
+        
+        <a href="./index.html" class="back-btn">Вернуться в игру</a>
+    </div>
 
-  <script>
-    // Проверка авторизации
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    if (!user) {
-      alert('Доступ запрещён!');
-      window.location.href = 'index.html';
-    } else {
-      document.getElementById('coins').textContent = user.coins || 0;
-    }
+    <div id="firework-container" class="firework-effect"></div>
 
-    // Логика магазина
-    function buyHint() {
-      if (user.coins >= 20) {
-        user.coins -= 20;
-        user.hints = (user.hints || 0) + 1;
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        alert(`Куплено! Подсказок: ${user.hints}`);
-      } else {
-        alert('Не хватает монет!');
-      }
-    }
-
-    function buyFirework() {
-      if (user.coins >= 15) {
-        user.coins -= 15;
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        launchFirework();
-        if (Math.random() < 0.05) {
-          user.hints = (user.hints || 0) + 1;
-          alert('Фейерверк подарил подсказку!');
+    <script>
+        // Проверка авторизации
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        if (!user) {
+            alert('Сначала зарегистрируйтесь!');
+            window.location.href = 'index.html';
+        } else {
+            // Обновляем баланс
+            document.getElementById('coins').textContent = user.coins || 0;
+            checkBalance();
         }
-      } else {
-        alert('Не хватает монет!');
-      }
-    }
-  </script>
+
+        // Проверка достаточности монет
+        function checkBalance() {
+            document.getElementById('buy-hint').disabled = (user.coins < 20);
+            document.getElementById('buy-firework').disabled = (user.coins < 15);
+        }
+
+        // Покупка подсказки
+        function buyHint() {
+            if (user.coins >= 20) {
+                user.coins -= 20;
+                user.hints = (user.hints || 0) + 1;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                document.getElementById('coins').textContent = user.coins;
+                checkBalance();
+                alert(`Куплено! Теперь у вас ${user.hints} подсказок.`);
+            }
+        }
+
+        // Покупка фейерверка
+        function buyFirework() {
+            if (user.coins >= 15) {
+                user.coins -= 15;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                document.getElementById('coins').textContent = user.coins;
+                checkBalance();
+                launchFirework();
+                
+                // 5% шанс получить подсказку
+                if (Math.random() < 0.05) {
+                    user.hints = (user.hints || 0) + 1;
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    setTimeout(() => {
+                        alert('Вам повезло! Фейерверк подарил подсказку!');
+                    }, 1000);
+                }
+            }
+        }
+
+        // Эффект фейерверка
+        function launchFirework() {
+            const container = document.getElementById('firework-container');
+            container.innerHTML = '';
+            
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = '5px';
+                particle.style.height = '5px';
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.borderRadius = '50%';
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.animation = `explode 1s ease-out forwards`;
+                
+                container.appendChild(particle);
+                
+                // Удаляем частицу после анимации
+                setTimeout(() => {
+                    particle.remove();
+                }, 1000);
+            }
+            
+            // Добавляем стили для анимации
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes explode {
+                    0% { transform: scale(1); opacity: 1; }
+                    100% { transform: scale(20); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    </script>
 </body>
 </html>
