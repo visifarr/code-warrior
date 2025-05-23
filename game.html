@@ -1,17 +1,126 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <title>Code Warrior - Игра</title>
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Warrior - Игра</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        #problem {
+            font-size: 24px;
+            margin: 20px 0;
+            color: #2c3e50;
+        }
+        #answer {
+            padding: 10px;
+            font-size: 18px;
+            width: 200px;
+            margin: 10px;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        #coins {
+            font-weight: bold;
+            color: #f39c12;
+            font-size: 20px;
+        }
+        .nav-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #3498db;
+            text-decoration: none;
+            font-size: 16px;
+            border: 2px solid #3498db;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        .nav-link:hover {
+            background: #3498db;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-  <div class="game-container">
-    <h1 id="problem">Реши пример: <span id="task">5 + 3 = ?</span></h1>
-    <input type="number" id="answer">
-    <button onclick="checkAnswer()">Проверить</button>
-    <p>Монеты: <span id="coins">0</span></p>
-    <a href="lobby.html">Магазин</a>
-  </div>
-  <script src="js/game.js"></script>
+    <div class="game-container">
+        <h1>Code Warrior</h1>
+        <div id="problem">Реши пример: <span id="task">5 + 3 = ?</span></div>
+        <input type="number" id="answer" placeholder="Ваш ответ">
+        <button onclick="checkAnswer()">Проверить</button>
+        <p>Монеты: <span id="coins">0</span></p>
+        <a href="lobby.html" class="nav-link">Магазин</a>
+    </div>
+
+    <script>
+        // Проверяем, авторизован ли пользователь
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) {
+            alert('Сначала зарегистрируйтесь!');
+            window.location.href = 'index.html';
+        } else {
+            document.getElementById('coins').textContent = currentUser.coins || 0;
+        }
+
+        // Генерация примера
+        function generateProblem() {
+            const a = Math.floor(Math.random() * 10) + 1;
+            const b = Math.floor(Math.random() * 10) + 1;
+            document.getElementById('task').textContent = `${a} + ${b} = ?`;
+            return a + b;
+        }
+
+        let correctAnswer = generateProblem();
+
+        // Проверка ответа
+        function checkAnswer() {
+            const userAnswer = parseInt(document.getElementById('answer').value);
+            if (isNaN(userAnswer)) {
+                alert('Введите число!');
+                return;
+            }
+
+            if (userAnswer === correctAnswer) {
+                // Начисляем монеты
+                currentUser.coins = (currentUser.coins || 0) + 10;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                document.getElementById('coins').textContent = currentUser.coins;
+                
+                alert(`Правильно! +10 монет. Всего: ${currentUser.coins}`);
+                correctAnswer = generateProblem();
+                document.getElementById('answer').value = '';
+            } else {
+                alert('Неправильно! Попробуйте ещё раз.');
+            }
+        }
+    </script>
 </body>
 </html>
