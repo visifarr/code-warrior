@@ -1,18 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Игра | Code Warrior</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .game-container {
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        #problem {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        #answer {
+            padding: 10px;
+            width: 100px;
+            font-size: 18px;
+            text-align: center;
+        }
+        #coins {
+            color: gold;
+            font-weight: bold;
+        }
+        .shop-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #2196F3;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-    <div class="game-box">
+    <div class="game-container">
         <h1>Code Warrior</h1>
-        <div id="problem">Задача: <span id="task">5 + 3 = ?</span></div>
-        <input type="number" id="answer">
+        <div id="problem">Решите: <span id="task">5 + 3 = ?</span></div>
+        <input type="number" id="answer" placeholder="Ответ">
         <button onclick="checkAnswer()">Проверить</button>
         <p>Монеты: <span id="coins">0</span></p>
         <a href="shop.html" class="shop-btn">Магазин</a>
     </div>
+
     <script src="js/game.js"></script>
 </body>
 </html>
