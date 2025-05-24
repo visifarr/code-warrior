@@ -2,22 +2,33 @@
 const user = JSON.parse(localStorage.getItem('currentUser'));
 
 if (!user) {
-    alert('Пожалуйста, зарегистрируйтесь!');
+    alert('Пожалуйста, войдите в аккаунт!');
     window.location.href = 'index.html';
 } else {
-    document.getElementById('coins').textContent = user.coins;
+    // Обновляем данные на странице
+    document.getElementById('coins').textContent = user.coins || 0;
+    document.getElementById('hints').textContent = user.hints || 0;
 }
 
-// Логика игры
+// Генерация математического примера
 function generateProblem() {
+    const operations = [
+        { symbol: '+', func: (a, b) => a + b },
+        { symbol: '-', func: (a, b) => a - b },
+        { symbol: '*', func: (a, b) => a * b }
+    ];
+    
+    const op = operations[Math.floor(Math.random() * operations.length)];
     const a = Math.floor(Math.random() * 10) + 1;
     const b = Math.floor(Math.random() * 10) + 1;
-    document.getElementById('task').textContent = `${a} + ${b} = ?`;
-    return a + b;
+    
+    document.getElementById('task').textContent = `${a} ${op.symbol} ${b} = ?`;
+    return op.func(a, b);
 }
 
 let correctAnswer = generateProblem();
 
+// Проверка ответа
 function checkAnswer() {
     const userAnswer = parseInt(document.getElementById('answer').value);
     
@@ -34,6 +45,22 @@ function checkAnswer() {
         correctAnswer = generateProblem();
         document.getElementById('answer').value = '';
     } else {
-        alert('Неправильно! Попробуйте ещё.');
+        alert('Неправильно! Попробуйте ещё раз.');
+    }
+}
+
+// Использование подсказки
+function useHint() {
+    if (user.hints > 0) {
+        user.hints--;
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        document.getElementById('hints').textContent = user.hints;
+        
+        // Показываем часть ответа (первые 2 символа)
+        const answerStr = String(correctAnswer);
+        const partialAnswer = answerStr.substring(0, 2) + '...';
+        alert(`Подсказка: ответ начинается с "${partialAnswer}"`);
+    } else {
+        alert('У вас нет подсказок!');
     }
 }
