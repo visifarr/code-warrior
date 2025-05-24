@@ -5,48 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code Warrior - Вход</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/settings.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #f0f2f5;
+            font-family: var(--font-family, 'Arial');
+            background: var(--bg-color, linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%));
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            transition: all 0.5s;
         }
         .auth-box {
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.2);
             width: 350px;
             text-align: center;
+            backdrop-filter: blur(5px);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
         }
         input {
             width: 100%;
             padding: 12px;
             margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
             box-sizing: border-box;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        input:focus {
+            border-color: #3498db;
+            outline: none;
         }
         button {
             width: 100%;
             padding: 12px;
-            background: #4CAF50;
+            background: #2ecc71;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            margin-top: 10px;
+            font-size: 16px;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
         }
         .switch-form {
             color: #3498db;
             cursor: pointer;
             margin-top: 15px;
             display: block;
+            font-size: 14px;
+        }
+        .switch-form:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -54,7 +77,6 @@
     <div class="auth-box">
         <h1>Code Warrior</h1>
         
-        <!-- Форма входа -->
         <div id="login-form">
             <input type="email" id="login-email" placeholder="Ваш email">
             <input type="password" id="login-password" placeholder="Пароль">
@@ -62,7 +84,6 @@
             <span class="switch-form" onclick="showForm('register')">Нет аккаунта? Зарегистрируйтесь</span>
         </div>
         
-        <!-- Форма регистрации -->
         <div id="register-form" style="display: none;">
             <input type="email" id="reg-email" placeholder="Ваш email">
             <input type="password" id="reg-password" placeholder="Пароль">
