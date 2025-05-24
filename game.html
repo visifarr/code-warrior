@@ -6,11 +6,17 @@
     <title>Игра | Code Warrior</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
         .game-container {
             max-width: 500px;
-            margin: 30px auto;
-            padding: 20px;
-            background: #fff;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
             text-align: center;
@@ -20,23 +26,43 @@
             margin: 20px 0;
         }
         #answer {
-            padding: 10px;
+            padding: 12px;
             width: 100px;
             font-size: 18px;
             text-align: center;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 15px 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
         }
         #coins {
             color: gold;
             font-weight: bold;
+            font-size: 20px;
+        }
+        #hints {
+            color: #e91e63;
+            font-weight: bold;
         }
         .shop-btn {
             display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: #2196F3;
+            background: #3498db;
             color: white;
-            text-decoration: none;
+            padding: 10px 20px;
+            margin-top: 20px;
             border-radius: 5px;
+            text-decoration: none;
+        }
+        .use-hint {
+            background: #e91e63;
         }
     </style>
 </head>
@@ -44,8 +70,9 @@
     <div class="game-container">
         <h1>Code Warrior</h1>
         <div id="problem">Решите: <span id="task">5 + 3 = ?</span></div>
-        <input type="number" id="answer" placeholder="Ответ">
+        <input type="number" id="answer" placeholder="Ваш ответ">
         <button onclick="checkAnswer()">Проверить</button>
+        <button class="use-hint" onclick="useHint()">Исп. подсказку (<span id="hints">0</span>)</button>
         <p>Монеты: <span id="coins">0</span></p>
         <a href="shop.html" class="shop-btn">Магазин</a>
     </div>
