@@ -1,27 +1,26 @@
-/* Общие стили */
+/* Общие стили для всех страниц */
 body {
     font-family: 'Arial', sans-serif;
-    background: #f5f5f5;
-    margin: 0;
-    padding: 0;
     line-height: 1.6;
-}
-
-button {
-    padding: 10px 15px;
-    background: #2196F3;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-button:hover {
-    background: #0b7dda;
+    color: #333;
 }
 
 a {
-    color: #2196F3;
     text-decoration: none;
+    color: #3498db;
+}
+
+button {
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Анимация фейерверка */
+@keyframes firework {
+    0% { transform: translate(0, 0); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)); opacity: 0; }
 }
