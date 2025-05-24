@@ -1,28 +1,39 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <!-- ... (head без изменений) ... -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин</title>
+    <link rel="stylesheet" href="css/style.css">
     <style>
-        .item h3::before {
-            content: "🎯 ";
+        .shop-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        /* ... (остальные стили без изменений) ... */
+        .item {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #eee;
+        }
     </style>
 </head>
 <body>
     <div class="shop-container">
-        <h1>🛍️ Магазин Code Warrior</h1>
-        <p>💰 Монеты: <span id="coins">0</span></p>
+        <h1>Магазин</h1>
+        <p>Монеты: <span id="coins">0</span></p>
         
         <div class="item">
-            <div class="item-info">
-                <h3>Подсказка</h3>
-                <p>💡 Показывает часть ответа</p>
-            </div>
-            <button onclick="buyHint()">🎫 20 монет</button>
+            <h3>Подсказка</h3>
+            <button onclick="buyHint()">20 монет</button>
         </div>
         
-        <!-- ... (остальные товары с аналогичными правками) ... -->
+        <a href="game.html" class="back-btn">Назад</a>
     </div>
+
+    <script src="js/shop.js"></script>
 </body>
 </html>
