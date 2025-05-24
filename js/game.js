@@ -1,38 +1,23 @@
-// NEW: Генерация задач по сложности
-function generateProblem(difficulty) {
-    let a, b, op, time;
-    
-    switch(difficulty) {
-        case 'medium': // Уравнения
-            a = Math.floor(Math.random() * 15) + 1;
-            b = Math.floor(Math.random() * 15) + 1;
-            op = ['+', '-', '*'][Math.floor(Math.random() * 3)];
-            break;
-            
-        case 'hard': // С делением
-            b = Math.floor(Math.random() * 10) + 1;
-            a = b * (Math.floor(Math.random() * 10) + 1);
-            op = ['*', '/'][Math.floor(Math.random() * 2)];
-            break;
-            
-        case 'timed': // Для режима на время
-            const ops = ['+', '-', '*', '/'];
-            op = ops[Math.floor(Math.random() * ops.length)];
-            // ... (генерация чисел в зависимости от операции)
-            break;
-            
-        default: // Обычный режим
-            a = Math.floor(Math.random() * 10) + 1;
-            b = Math.floor(Math.random() * 10) + 1;
-            op = Math.random() > 0.7 ? '*' : '+';
-    }
-    
-    // ... (остальная логика генерации)
+let coins = 0;
+let hints = 0;
+
+function generateProblem() {
+    const a = Math.floor(Math.random() * 10);
+    const b = Math.floor(Math.random() * 10);
+    document.getElementById('task').textContent = `${a} + ${b} = ?`;
+    return a + b;
 }
 
-// NEW: Проверка уровня для сложности
-function checkDifficultyLock() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    document.querySelector('[data-diff="medium"]').classList.toggle('locked', user.level < 25);
-    document.querySelector('[data-diff="hard"]').classList.toggle('locked', user.level < 50);
+let correctAnswer = generateProblem();
+
+function checkAnswer() {
+    const userAnswer = parseInt(document.getElementById('answer').value);
+    if (userAnswer === correctAnswer) {
+        coins += 10;
+        document.getElementById('coins').textContent = coins;
+        alert('Правильно! +10 монет');
+        correctAnswer = generateProblem();
+    } else {
+        alert('Ошибка!');
+    }
 }
