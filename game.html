@@ -6,101 +6,40 @@
     <title>Code Warrior</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        body {
-            font-family: var(--font-family, 'Arial');
-            background: var(--bg-color, #f0f2f5);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            transition: all 0.5s;
-        }
         .game-container {
-            max-width: 600px;
+            max-width: 500px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.1);
-            backdrop-filter: blur(5px);
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
         }
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
+        #problem {
+            font-size: 24px;
+            margin: 20px 0;
         }
-        .emoji-btn {
-            font-size: 28px;
-            cursor: pointer;
-            background: none;
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
             border: none;
-            transition: transform 0.3s;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
         }
-        .emoji-btn:hover {
-            transform: scale(1.2);
-        }
-        /* ... (остальные стили без изменений) ... */
     </style>
 </head>
 <body>
     <div class="game-container">
-        <div class="header">
-            <button id="theme-toggle" class="emoji-btn">🌄</button>
-            <h1>Code Warrior</h1>
-            <button id="settings-btn" class="emoji-btn">⚙️</button>
-        </div>
-        
-        <div class="difficulty-selector">
-            <button class="difficulty-btn active" data-diff="easy">🔢 Обычный</button>
-            <button class="difficulty-btn" data-diff="medium">✖️ Усиленный</button>
-            <button class="difficulty-btn locked" data-diff="hard">➗ Сложный</button>
-            <button class="difficulty-btn" data-diff="timed">⏱️ На время</button>
-        </div>
-        
-        <div id="timer" style="display: none;">⏳ Время: <span id="time-left">0</span>с</div>
-        
+        <h1>Code Warrior</h1>
         <div id="problem">Решите: <span id="task">5 + 3 = ?</span></div>
-        <input type="number" id="answer" placeholder="Ваш ответ">
-        <button onclick="checkAnswer()">✅ Проверить</button>
-        <button class="use-hint" onclick="useHint()">💡 Исп. подсказку (<span id="hints">0</span>)</button>
-        <p>💰 Монеты: <span id="coins">0</span></p>
-        <a href="shop.html" class="shop-btn">🛒 Магазин</a>
-    </div>
-
-    <!-- Модальное окно настроек -->
-    <div id="settings-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <h2>⚙️ Настройки</h2>
-            <div class="promo-section">
-                <input type="text" id="promo-code" placeholder="Введите промокод">
-                <button onclick="applyPromoCode()">🎁 Активировать</button>
-            </div>
-            <div class="achievements-section">
-                <h3>🏆 Достижения</h3>
-                <p id="current-rank">📌 Текущий ранг: Новичок</p>
-                <p id="next-rank">📈 До следующего ранга: 5/5 уровней</p>
-            </div>
-            <button class="close-btn" onclick="closeModal()">❌ Закрыть</button>
-        </div>
+        <input type="number" id="answer" placeholder="Ответ">
+        <button onclick="checkAnswer()">Проверить</button>
+        <p>Монеты: <span id="coins">0</span></p>
+        <a href="shop.html" class="shop-btn">Магазин</a>
     </div>
 
     <script src="js/game.js"></script>
-    <script src="js/settings.js"></script>
-    <script src="js/achievements.js"></script>
-    <script>
-        // Переключение темы
-        const themeBtn = document.getElementById('theme-toggle');
-        themeBtn.addEventListener('click', () => {
-            document.body.classList.toggle('dark-theme');
-            themeBtn.textContent = document.body.classList.contains('dark-theme') ? '🌆' : '🌄';
-        });
-
-        // Открытие настроек
-        document.getElementById('settings-btn').addEventListener('click', () => {
-            document.getElementById('settings-modal').style.display = 'block';
-            updateRankInfo(); // Обновляем информацию о ранге
-        });
-    </script>
 </body>
 </html>
