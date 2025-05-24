@@ -1,103 +1,17 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Warrior</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f0f2f5;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        .game-box {
-            background: white;
-            max-width: 500px;
-            margin: 30px auto;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        #problem {
-            font-size: 24px;
-            margin: 20px 0;
-        }
-        #answer {
-            padding: 10px;
-            font-size: 18px;
-            width: 100px;
-        }
-        button {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #coins {
-            font-weight: bold;
-            color: #FFD700;
-            font-size: 20px;
-        }
-        .shop-link {
-            display: inline-block;
-            margin-top: 20px;
-            color: #2196F3;
-            text-decoration: none;
-            border: 2px solid #2196F3;
-            padding: 8px 16px;
-            border-radius: 5px;
-        }
-    </style>
+    <title>Регистрация | Code Warrior</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="game-box">
-        <h1>Code Warrior</h1>
-        <div id="problem">Реши пример: <span id="task">5 + 3 = ?</span></div>
-        <input type="number" id="answer" placeholder="Ответ">
-        <button onclick="checkAnswer()">Проверить</button>
-        <p>Монеты: <span id="coins">0</span></p>
-        <a href="lobby.html" class="shop-link">Магазин</a>
+    <div class="auth-box">
+        <h1>Регистрация</h1>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Пароль">
+        <button onclick="register()">Создать аккаунт</button>
+        <p>Есть аккаунт? <a href="game.html">Войти</a></p>
     </div>
-
-    <script>
-        // Проверка авторизации
-        const user = JSON.parse(localStorage.getItem('currentUser'));
-        if (!user) {
-            alert('Пожалуйста, зарегистрируйтесь!');
-            window.location.href = 'index.html';
-        } else {
-            document.getElementById('coins').textContent = user.coins || 0;
-        }
-
-        // Генерация примера
-        function generateProblem() {
-            const a = Math.floor(Math.random() * 10) + 1;
-            const b = Math.floor(Math.random() * 10) + 1;
-            document.getElementById('task').textContent = `${a} + ${b} = ?`;
-            return a + b;
-        }
-
-        let correctAnswer = generateProblem();
-
-        // Проверка ответа
-        function checkAnswer() {
-            const userAnswer = parseInt(document.getElementById('answer').value);
-            if (userAnswer === correctAnswer) {
-                user.coins = (user.coins || 0) + 10;
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                document.getElementById('coins').textContent = user.coins;
-                alert('Правильно! +10 монет');
-                correctAnswer = generateProblem();
-                document.getElementById('answer').value = '';
-            } else {
-                alert('Неправильно! Попробуйте ещё раз.');
-            }
-        }
-    </script>
+    <script src="js/auth.js"></script>
 </body>
 </html>
