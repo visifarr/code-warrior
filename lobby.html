@@ -4,94 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Магазин Code Warrior</title>
-    <link rel="stylesheet" href="css/style.css">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f2f5;
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
             margin: 0;
             padding: 20px;
-            color: #333;
-        }
-        .shop-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
             text-align: center;
         }
-        h1 {
-            color: #2c3e50;
-        }
-        .balance {
-            font-size: 20px;
-            margin: 20px 0;
-        }
-        #coins {
-            font-weight: bold;
-            color: #f39c12;
+        .shop-box {
+            background: white;
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         .item {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 10px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
         button {
-            background: #3498db;
+            background: #2196F3;
             color: white;
             border: none;
             padding: 8px 15px;
             border-radius: 5px;
             cursor: pointer;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background: #2980b9;
         }
         button:disabled {
-            background: #95a5a6;
+            background: #cccccc;
             cursor: not-allowed;
         }
-        .back-btn {
+        #coins {
+            font-weight: bold;
+            color: #FFD700;
+            font-size: 20px;
+        }
+        .back-link {
             display: inline-block;
             margin-top: 20px;
-            color: #3498db;
+            color: #4CAF50;
             text-decoration: none;
-            border: 2px solid #3498db;
-            padding: 8px 15px;
+            border: 2px solid #4CAF50;
+            padding: 8px 16px;
             border-radius: 5px;
-            transition: all 0.3s;
-        }
-        .back-btn:hover {
-            background: #3498db;
-            color: white;
-        }
-        .firework-effect {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 100;
         }
     </style>
 </head>
 <body>
-    <div class="shop-container">
-        <h1>Магазин Code Warrior</h1>
-        <div class="balance">Ваши монеты: <span id="coins">0</span></div>
+    <div class="shop-box">
+        <h1>Магазин</h1>
+        <p>Ваши монеты: <span id="coins">0</span></p>
         
         <div class="item">
             <div>
                 <h3>Подсказка</h3>
-                <p>Показывает часть решения примера</p>
+                <p>Показывает часть решения</p>
             </div>
             <button id="buy-hint" onclick="buyHint()">20 монет</button>
         </div>
@@ -99,32 +73,29 @@
         <div class="item">
             <div>
                 <h3>Фейерверк</h3>
-                <p>Красивый эффект + шанс 5% получить подсказку</p>
+                <p>Красивый эффект + шанс получить подсказку</p>
             </div>
             <button id="buy-firework" onclick="buyFirework()">15 монет</button>
         </div>
         
-        <a href="./index.html" class="back-btn">Вернуться в игру</a>
+        <a href="index.html" class="back-link">Назад в игру</a>
     </div>
-
-    <div id="firework-container" class="firework-effect"></div>
 
     <script>
         // Проверка авторизации
         const user = JSON.parse(localStorage.getItem('currentUser'));
         if (!user) {
-            alert('Сначала зарегистрируйтесь!');
+            alert('Пожалуйста, зарегистрируйтесь!');
             window.location.href = 'index.html';
         } else {
-            // Обновляем баланс
             document.getElementById('coins').textContent = user.coins || 0;
-            checkBalance();
+            updateButtons();
         }
 
-        // Проверка достаточности монет
-        function checkBalance() {
-            document.getElementById('buy-hint').disabled = (user.coins < 20);
-            document.getElementById('buy-firework').disabled = (user.coins < 15);
+        // Обновление кнопок
+        function updateButtons() {
+            document.getElementById('buy-hint').disabled = user.coins < 20;
+            document.getElementById('buy-firework').disabled = user.coins < 15;
         }
 
         // Покупка подсказки
@@ -134,8 +105,8 @@
                 user.hints = (user.hints || 0) + 1;
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 document.getElementById('coins').textContent = user.coins;
-                checkBalance();
-                alert(`Куплено! Теперь у вас ${user.hints} подсказок.`);
+                updateButtons();
+                alert('Подсказка куплена!');
             }
         }
 
@@ -145,8 +116,26 @@
                 user.coins -= 15;
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 document.getElementById('coins').textContent = user.coins;
-                checkBalance();
-                launchFirework();
+                updateButtons();
+                
+                // Эффект фейерверка
+                const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00'];
+                for (let i = 0; i < 30; i++) {
+                    const fw = document.createElement('div');
+                    fw.style.position = 'fixed';
+                    fw.style.width = '5px';
+                    fw.style.height = '5px';
+                    fw.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    fw.style.borderRadius = '50%';
+                    fw.style.left = Math.random() * 100 + 'vw';
+                    fw.style.top = Math.random() * 100 + 'vh';
+                    fw.style.animation = 'firework 1s forwards';
+                    document.body.appendChild(fw);
+                    
+                    setTimeout(() => {
+                        fw.remove();
+                    }, 1000);
+                }
                 
                 // 5% шанс получить подсказку
                 if (Math.random() < 0.05) {
@@ -158,43 +147,13 @@
                 }
             }
         }
-
-        // Эффект фейерверка
-        function launchFirework() {
-            const container = document.getElementById('firework-container');
-            container.innerHTML = '';
-            
-            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
-            
-            for (let i = 0; i < 50; i++) {
-                const particle = document.createElement('div');
-                particle.style.position = 'absolute';
-                particle.style.width = '5px';
-                particle.style.height = '5px';
-                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                particle.style.borderRadius = '50%';
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 100}%`;
-                particle.style.animation = `explode 1s ease-out forwards`;
-                
-                container.appendChild(particle);
-                
-                // Удаляем частицу после анимации
-                setTimeout(() => {
-                    particle.remove();
-                }, 1000);
-            }
-            
-            // Добавляем стили для анимации
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes explode {
-                    0% { transform: scale(1); opacity: 1; }
-                    100% { transform: scale(20); opacity: 0; }
-                }
-            `;
-            document.head.appendChild(style);
-        }
     </script>
+    
+    <style>
+        @keyframes firework {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(20); opacity: 0; }
+        }
+    </style>
 </body>
 </html>
