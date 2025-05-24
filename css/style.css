@@ -1,26 +1,43 @@
-/* Общие стили для всех страниц */
-body {
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
-    color: #333;
+/* Базовые стили */
+:root {
+    --bg-color: #f0f2f5;
+    --font-family: 'Arial', sans-serif;
 }
 
-a {
-    text-decoration: none;
-    color: #3498db;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-button {
-    transition: all 0.3s ease;
-}
-
-button:hover {
-    opacity: 0.9;
-    transform: translateY(-2px);
-}
-
-/* Анимация фейерверка */
+/* Анимации */
 @keyframes firework {
-    0% { transform: translate(0, 0); opacity: 1; }
-    100% { transform: translate(var(--tx), var(--ty)); opacity: 0; }
+    0% { 
+        transform: translate(0, 0) scale(1); 
+        opacity: 1;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% { 
+        transform: translate(var(--tx, 0), var(--ty, 0)) scale(0); 
+        opacity: 0;
+    }
+}
+
+/* Адаптивные стили */
+@media (max-width: 600px) {
+    .auth-box, .game-container, .shop-container {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    .item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .item > div {
+        margin-bottom: 10px;
+    }
 }
