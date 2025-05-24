@@ -3,16 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Регистрация | Code Warrior</title>
+    <title>Code Warrior - Вход</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
         .auth-box {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 20px;
-            background: #fff;
+            background: white;
+            padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            width: 350px;
+            text-align: center;
         }
         input {
             width: 100%;
@@ -20,6 +29,7 @@
             margin: 10px 0;
             border: 1px solid #ddd;
             border-radius: 5px;
+            box-sizing: border-box;
         }
         button {
             width: 100%;
@@ -29,18 +39,36 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .switch-form {
+            color: #3498db;
+            cursor: pointer;
+            margin-top: 15px;
+            display: block;
         }
     </style>
 </head>
 <body>
     <div class="auth-box">
-        <h1>Регистрация</h1>
-        <input type="email" id="email" placeholder="Ваш email">
-        <input type="password" id="password" placeholder="Пароль">
-        <button onclick="register()">Создать аккаунт</button>
-        <p style="text-align: center; margin-top: 15px;">
-            Уже есть аккаунт? <a href="game.html">Войти</a>
-        </p>
+        <h1>Code Warrior</h1>
+        
+        <!-- Форма входа -->
+        <div id="login-form">
+            <input type="email" id="login-email" placeholder="Ваш email">
+            <input type="password" id="login-password" placeholder="Пароль">
+            <button onclick="login()">Войти</button>
+            <span class="switch-form" onclick="showForm('register')">Нет аккаунта? Зарегистрируйтесь</span>
+        </div>
+        
+        <!-- Форма регистрации -->
+        <div id="register-form" style="display: none;">
+            <input type="email" id="reg-email" placeholder="Ваш email">
+            <input type="password" id="reg-password" placeholder="Пароль">
+            <button onclick="register()">Создать аккаунт</button>
+            <span class="switch-form" onclick="showForm('login')">Уже есть аккаунт? Войти</span>
+        </div>
     </div>
 
     <script src="js/auth.js"></script>
