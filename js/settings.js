@@ -1,31 +1,21 @@
-// Промокоды (код: [монеты, подсказки])
 const PROMO_CODES = {
-    "777": [500, 0],
-    "noob": [0, 5]
+    "777": { coins: 500, hints: 0, emoji: "💰" },
+    "noob": { coins: 0, hints: 5, emoji: "🎓" }
 };
 
 function applyPromoCode() {
     const code = document.getElementById('promo-code').value.trim();
-    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const promo = PROMO_CODES[code];
     
-    if (user.usedPromos?.includes(code)) {
-        alert("Промокод уже использован!");
+    if (!promo) {
+        alert("❌ Неверный промокод!");
         return;
     }
 
-    if (PROMO_CODES[code]) {
-        user.coins += PROMO_CODES[code][0];
-        user.hints += PROMO_CODES[code][1];
-        user.usedPromos = user.usedPromos || [];
-        user.usedPromos.push(code);
-        
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        alert(`Промокод активирован! Получено: ${PROMO_CODES[code][0]} монет и ${PROMO_CODES[code][1]} подсказок`);
-    } else {
-        alert("Неверный промокод!");
-    }
-}
-
-function closeModal() {
-    document.getElementById('settings-modal').style.display = 'none';
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    user.coins += promo.coins;
+    user.hints += promo.hints;
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    
+    alert(`${promo.emoji} Получено: ${promo.coins} монет и ${promo.hints} подсказок`);
 }
