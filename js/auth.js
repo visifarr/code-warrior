@@ -1,4 +1,4 @@
-// Переключение между формами
+// Переключение между формами входа и регистрации
 function showForm(formType) {
     document.getElementById('login-form').style.display = formType === 'login' ? 'block' : 'none';
     document.getElementById('register-form').style.display = formType === 'register' ? 'block' : 'none';
@@ -6,11 +6,11 @@ function showForm(formType) {
 
 // Регистрация нового пользователя
 function register() {
-    const email = document.getElementById('reg-email').value;
-    const password = document.getElementById('reg-password').value;
+    const email = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password').value.trim();
 
     if (!email || !password) {
-        alert('Заполните все поля!');
+        alert('Пожалуйста, заполните все поля!');
         return;
     }
 
@@ -25,7 +25,9 @@ function register() {
         email,
         password,
         coins: 0,
-        hints: 0
+        hints: 0,
+        background: '',
+        font: ''
     };
 
     accounts.push(newUser);
@@ -37,8 +39,8 @@ function register() {
 
 // Вход в аккаунт
 function login() {
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value.trim();
 
     const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
     const user = accounts.find(acc => acc.email === email && acc.password === password);
@@ -52,5 +54,5 @@ function login() {
     window.location.href = 'game.html';
 }
 
-// При загрузке страницы показываем форму входа
+// Показываем форму входа при загрузке
 showForm('login');
