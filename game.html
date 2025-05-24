@@ -1,105 +1,105 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <!-- ... (метатеги и подключения) ... -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Warrior</title>
+    <link rel="stylesheet" href="css/style.css">
     <style>
-        /* NEW: Хедер с переключением темы */
+        body {
+            font-family: var(--font-family, 'Arial');
+            background: var(--bg-color, #f0f2f5);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            transition: all 0.5s;
+        }
+        .game-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px);
+        }
         .header {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             margin-bottom: 20px;
         }
-        .theme-toggle {
+        .emoji-btn {
+            font-size: 28px;
             cursor: pointer;
-            width: 32px;
-            height: 32px;
+            background: none;
+            border: none;
+            transition: transform 0.3s;
         }
-        .settings-btn {
-            cursor: pointer;
-            width: 32px;
-            height: 32px;
+        .emoji-btn:hover {
+            transform: scale(1.2);
         }
-        
-        /* NEW: Стили для сложности */
-        .difficulty-selector {
-            display: flex;
-            gap: 10px;
-            margin: 15px 0;
-            justify-content: center;
-        }
-        .difficulty-btn {
-            padding: 8px 15px;
-            background: #3498db;
-            border-radius: 20px;
-            font-size: 14px;
-        }
-        .difficulty-btn.locked {
-            background: #95a5a6;
-            position: relative;
-        }
-        .locked::after {
-            content: "🔒";
-            position: absolute;
-            right: -5px;
-            top: -5px;
-        }
+        /* ... (остальные стили без изменений) ... */
     </style>
 </head>
 <body>
     <div class="game-container">
-        <!-- NEW: Хедер с переключением темы -->
         <div class="header">
-            <img id="theme-toggle" class="theme-toggle" src="assets/sun.png" alt="Сменить тему">
+            <button id="theme-toggle" class="emoji-btn">🌄</button>
             <h1>Code Warrior</h1>
-            <img id="settings-btn" class="settings-btn" src="assets/settings.png" alt="Настройки">
+            <button id="settings-btn" class="emoji-btn">⚙️</button>
         </div>
         
-        <!-- NEW: Выбор сложности -->
         <div class="difficulty-selector">
-            <button class="difficulty-btn active" data-diff="easy">Обычный</button>
-            <button class="difficulty-btn" data-diff="medium">Усиленный</button>
-            <button class="difficulty-btn locked" data-diff="hard">Сложный</button>
-            <button class="difficulty-btn" data-diff="timed">На время</button>
+            <button class="difficulty-btn active" data-diff="easy">🔢 Обычный</button>
+            <button class="difficulty-btn" data-diff="medium">✖️ Усиленный</button>
+            <button class="difficulty-btn locked" data-diff="hard">➗ Сложный</button>
+            <button class="difficulty-btn" data-diff="timed">⏱️ На время</button>
         </div>
         
-        <!-- ... (остальная разметка) ... -->
+        <div id="timer" style="display: none;">⏳ Время: <span id="time-left">0</span>с</div>
+        
+        <div id="problem">Решите: <span id="task">5 + 3 = ?</span></div>
+        <input type="number" id="answer" placeholder="Ваш ответ">
+        <button onclick="checkAnswer()">✅ Проверить</button>
+        <button class="use-hint" onclick="useHint()">💡 Исп. подсказку (<span id="hints">0</span>)</button>
+        <p>💰 Монеты: <span id="coins">0</span></p>
+        <a href="shop.html" class="shop-btn">🛒 Магазин</a>
     </div>
 
-    <!-- NEW: Модальное окно настроек -->
-    <div id="settings-modal" class="modal">
+    <!-- Модальное окно настроек -->
+    <div id="settings-modal" class="modal" style="display: none;">
         <div class="modal-content">
-            <h2>Настройки</h2>
+            <h2>⚙️ Настройки</h2>
             <div class="promo-section">
                 <input type="text" id="promo-code" placeholder="Введите промокод">
-                <button onclick="applyPromoCode()">Активировать</button>
+                <button onclick="applyPromoCode()">🎁 Активировать</button>
             </div>
             <div class="achievements-section">
-                <h3>Достижения</h3>
-                <p id="current-rank">Текущий ранг: Новичок</p>
-                <p id="next-rank">До следующего ранга: 5/5 уровней</p>
+                <h3>🏆 Достижения</h3>
+                <p id="current-rank">📌 Текущий ранг: Новичок</p>
+                <p id="next-rank">📈 До следующего ранга: 5/5 уровней</p>
             </div>
-            <button class="close-btn" onclick="closeModal()">Закрыть</button>
+            <button class="close-btn" onclick="closeModal()">❌ Закрыть</button>
         </div>
     </div>
 
-    <!-- NEW: Подключение новых скриптов -->
+    <script src="js/game.js"></script>
     <script src="js/settings.js"></script>
     <script src="js/achievements.js"></script>
     <script>
-        // NEW: Переключение темы
-        const themeToggle = document.getElementById('theme-toggle');
-        themeToggle.addEventListener('click', () => {
+        // Переключение темы
+        const themeBtn = document.getElementById('theme-toggle');
+        themeBtn.addEventListener('click', () => {
             document.body.classList.toggle('dark-theme');
-            themeToggle.src = document.body.classList.contains('dark-theme') 
-                ? 'assets/moon.png' 
-                : 'assets/sun.png';
+            themeBtn.textContent = document.body.classList.contains('dark-theme') ? '🌆' : '🌄';
         });
-        
-        // NEW: Открытие настроек
+
+        // Открытие настроек
         document.getElementById('settings-btn').addEventListener('click', () => {
             document.getElementById('settings-modal').style.display = 'block';
+            updateRankInfo(); // Обновляем информацию о ранге
         });
     </script>
 </body>
