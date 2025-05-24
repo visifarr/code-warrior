@@ -1,19 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Магазин | Code Warrior</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .shop-container {
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        #coins {
+            color: gold;
+            font-weight: bold;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-    <div class="shop-box">
+    <div class="shop-container">
         <h1>Магазин</h1>
-        <p>Монеты: <span id="coins">0</span></p>
+        <p>Ваши монеты: <span id="coins">0</span></p>
+        
         <div class="item">
-            <h3>Подсказка</h3>
+            <div>
+                <h3>Подсказка</h3>
+                <p>Показывает часть ответа</p>
+            </div>
             <button onclick="buyHint()">20 монет</button>
         </div>
-        <a href="game.html" class="back-btn">Назад</a>
+        
+        <a href="game.html" class="back-btn">Назад в игру</a>
     </div>
+
     <script src="js/shop.js"></script>
 </body>
 </html>
