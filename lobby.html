@@ -1,1 +1,485 @@
-
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Warrior | Лобби</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .lobby-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63);
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #6c63ff, #ff6584);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .user-details h2 {
+            margin-bottom: 5px;
+        }
+        
+        .user-rank {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .rank-badge {
+            background: #ffb74d;
+            color: #12122d;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        
+        .user-email {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .user-email:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .email-text {
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .email-hidden {
+            font-family: monospace;
+            letter-spacing: 3px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: #6c63ff;
+        }
+        
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #6c63ff;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .game-modes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .mode-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .mode-card:hover {
+            transform: translateY(-5px);
+            border-color: #6c63ff;
+            box-shadow: 0 10px 30px rgba(108, 99, 255, 0.2);
+        }
+        
+        .mode-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #6c63ff;
+        }
+        
+        .mode-difficulty {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .mode-features {
+            list-style: none;
+            margin: 15px 0;
+        }
+        
+        .mode-features li {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .mode-features i {
+            color: #00d4aa;
+        }
+        
+        .mode-reward {
+            color: #ffb74d;
+            font-weight: bold;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(108, 99, 255, 0.2);
+            border-color: #6c63ff;
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn i {
+            font-size: 1.2rem;
+        }
+        
+        .daily-challenge {
+            background: linear-gradient(45deg, #ff6584, #6c63ff);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            animation: glow 2s infinite;
+        }
+        
+        .challenge-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .challenge-title i {
+            font-size: 1.5rem;
+        }
+        
+        .challenge-progress {
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 1s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .user-email {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .nav-buttons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lobby-container">
+        <div class="header">
+            <div class="user-info">
+                <div class="avatar" id="user-avatar">W</div>
+                <div class="user-details">
+                    <h2 id="username">Warrior123</h2>
+                    <div class="user-rank">
+                        <span class="rank-badge" id="user-rank">Новичок</span>
+                        <span>Уровень <span id="user-level">1</span></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="user-email" id="email-toggle">
+                <i class="fas fa-envelope"></i>
+                <span class="email-text" id="email">user@example.com</span>
+                <span class="email-hidden hidden">••••••••@••••••.•••</span>
+                <button class="btn-secondary" style="padding: 5px 10px;">
+                    <i class="fas fa-eye" id="eye-icon"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="stat-value" id="coins">500</div>
+                <div class="stat-label">Монеты</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="stat-value" id="hints">3</div>
+                <div class="stat-label">Подсказки</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="stat-value" id="score">0</div>
+                <div class="stat-label">Общий счет</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-value" id="streak">0</div>
+                <div class="stat-label">Дней подряд</div>
+            </div>
+        </div>
+        
+        <h2>Режимы игры</h2>
+        <div class="game-modes">
+            <div class="mode-card">
+                <div class="mode-icon">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <h3>Тренировка</h3>
+                <span class="mode-difficulty">Легкий</span>
+                <p>Практикуйся без ограничения времени. Идеально для новичков.</p>
+                <ul class="mode-features">
+                    <li><i class="fas fa-check"></i> Без времени</li>
+                    <li><i class="fas fa-check"></i> Простые примеры</li>
+                    <li><i class="fas fa-check"></i> Подсказки доступны</li>
+                </ul>
+                <div class="mode-reward">Награда: +10 монет за пример</div>
+                <button class="btn-primary mt-2" onclick="startGame('easy')">
+                    <i class="fas fa-play"></i> Играть
+                </button>
+            </div>
+            
+            <div class="mode-card">
+                <div class="mode-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3>На время</h3>
+                <span class="mode-difficulty">Средний</span>
+                <p>2 минуты на решение максимального количества примеров.</p>
+                <ul class="mode-features">
+                    <li><i class="fas fa-check"></i> 2 минуты</li>
+                    <li><i class="fas fa-check"></i> 30+ примеров</li>
+                    <li><i class="fas fa-check"></i> Умеренная сложность</li>
+                </ul>
+                <div class="mode-reward">Награда: +25 монет за пример</div>
+                <button class="btn-primary mt-2" onclick="startGame('medium')">
+                    <i class="fas fa-play"></i> Играть
+                </button>
+            </div>
+            
+            <div class="mode-card">
+                <div class="mode-icon">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <h3>Прогрессия</h3>
+                <span class="mode-difficulty">Сложный</span>
+                <p>Сложность растет с каждым примером. Сложение, вычитание, умножение, деление.</p>
+                <ul class="mode-features">
+                    <li><i class="fas fa-check"></i> Примеры в столбик</li>
+                    <li><i class="fas fa-check"></i> Сложность растет</li>
+                    <li><i class="fas fa-check"></i> Большие числа</li>
+                </ul>
+                <div class="mode-reward">Награда: +50 монет за пример</div>
+                <button class="btn-primary mt-2" onclick="startGame('hard')">
+                    <i class="fas fa-play"></i> Играть
+                </button>
+            </div>
+        </div>
+        
+        <div class="daily-challenge">
+            <div class="challenge-title">
+                <i class="fas fa-calendar-star"></i>
+                <h3>Ежедневное испытание</h3>
+            </div>
+            <p>Реши 10 примеров сегодня и получи бонусные награды!</p>
+            <div class="challenge-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="daily-progress" style="width: 30%"></div>
+                </div>
+                <div class="text-center mt-1">3/10 примеров</div>
+            </div>
+            <button class="btn-warning" onclick="startGame('daily')">
+                <i class="fas fa-bolt"></i> Начать испытание
+            </button>
+        </div>
+        
+        <div class="nav-buttons">
+            <a href="shop.html" class="nav-btn">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Магазин</span>
+            </a>
+            <a href="inventory.html" class="nav-btn">
+                <i class="fas fa-box-open"></i>
+                <span>Инвентарь</span>
+            </a>
+            <a href="#" class="nav-btn" id="leaderboard-btn">
+                <i class="fas fa-trophy"></i>
+                <span>Таблица лидеров</span>
+            </a>
+            <a href="#" class="nav-btn" id="settings-btn">
+                <i class="fas fa-cog"></i>
+                <span>Настройки</span>
+            </a>
+            <a href="#" class="nav-btn" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Выйти</span>
+            </a>
+        </div>
+    </div>
+    
+    <script src="js/main.js"></script>
+    <script>
+        // Загрузка данных пользователя
+        function loadUserData() {
+            const user = JSON.parse(localStorage.getItem('codeWarriorUser'));
+            if (user) {
+                document.getElementById('username').textContent = user.username || 'Игрок';
+                document.getElementById('user-avatar').textContent = user.username?.charAt(0) || 'U';
+                document.getElementById('email').textContent = user.email || 'email@example.com';
+                document.getElementById('coins').textContent = user.coins || 0;
+                document.getElementById('hints').textContent = user.hints || 0;
+                document.getElementById('score').textContent = user.totalScore || 0;
+                document.getElementById('streak').textContent = user.streak || 0;
+                document.getElementById('user-level').textContent = user.level || 1;
+                document.getElementById('user-rank').textContent = user.rank || 'Новичок';
+                
+                // Прогресс ежедневного испытания
+                const today = new Date().toDateString();
+                const dailyProgress = user.dailyProgress || {};
+                if (dailyProgress.date === today) {
+                    const progress = (dailyProgress.solved / 10) * 100;
+                    document.getElementById('daily-progress').style.width = progress + '%';
+                }
+            }
+        }
+        
+        // Переключение видимости email
+        document.getElementById('email-toggle').addEventListener('click', function() {
+            const emailText = document.getElementById('email');
+            const emailHidden = document.querySelector('.email-hidden');
+            const eyeIcon = document.getElementById('eye-icon');
+            
+            if (emailText.classList.contains('hidden')) {
+                emailText.classList.remove('hidden');
+                emailHidden.classList.add('hidden');
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            } else {
+                emailText.classList.add('hidden');
+                emailHidden.classList.remove('hidden');
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            }
+        });
+        
+        // Начало игры
+        function startGame(mode) {
+            localStorage.setItem('gameMode', mode);
+            window.location.href = 'game.html';
+        }
+        
+        // Кнопка выхода
+        document.getElementById('logout-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('Вы уверены, что хотите выйти?')) {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            }
+        });
+        
+        // Загрузка данных при старте
+        window.addEventListener('DOMContentLoaded', loadUserData);
+    </script>
+</body>
+</html>
