@@ -1,1 +1,237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Warrior | Инвентарь</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/inventory.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="inventory-container">
+        <header class="inventory-header">
+            <a href="lobby.html" class="btn-secondary">
+                <i class="fas fa-arrow-left"></i> Назад
+            </a>
+            <h1><i class="fas fa-box-open"></i> Мой инвентарь</h1>
+            <div class="inventory-stats">
+                <div class="stat">
+                    <i class="fas fa-box"></i>
+                    <span id="total-items">0 предметов</span>
+                </div>
+            </div>
+        </header>
 
+        <div class="inventory-tabs">
+            <button class="inv-tab active" data-tab="all">Все предметы</button>
+            <button class="inv-tab" data-tab="hints">Подсказки</button>
+            <button class="inv-tab" data-tab="boosters">Усиления</button>
+            <button class="inv-tab" data-tab="cosmetics">Косметика</button>
+            <button class="inv-tab" data-tab="fun">Развлечения</button>
+        </div>
+
+        <main class="inventory-main">
+            <div class="items-container active" id="all-items">
+                <!-- Все предметы -->
+            </div>
+            
+            <div class="items-container" id="hints-items">
+                <!-- Подсказки -->
+            </div>
+            
+            <div class="items-container" id="boosters-items">
+                <!-- Усиления -->
+            </div>
+            
+            <div class="items-container" id="cosmetics-items">
+                <!-- Косметика -->
+            </div>
+            
+            <div class="items-container" id="fun-items">
+                <!-- Развлечения -->
+            </div>
+
+            <div class="empty-inventory" id="empty-inventory">
+                <i class="fas fa-box-open fa-4x"></i>
+                <h3>Инвентарь пуст</h3>
+                <p>Купите предметы в магазине, чтобы они появились здесь</p>
+                <a href="shop.html" class="btn-primary">
+                    <i class="fas fa-store"></i> Перейти в магазин
+                </a>
+            </div>
+        </main>
+
+        <div class="active-items">
+            <h3><i class="fas fa-bolt"></i> Активные предметы</h3>
+            <div class="active-list" id="active-items">
+                <!-- Активные предметы -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/inventory.js"></script>
+    <script>
+        // Переключение вкладок
+        document.querySelectorAll('.inv-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.dataset.tab;
+                
+                // Убираем активный класс со всех вкладок и контейнеров
+                document.querySelectorAll('.inv-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.items-container').forEach(c => c.classList.remove('active'));
+                
+                // Добавляем активный класс к выбранной вкладке и контейнеру
+                this.classList.add('active');
+                document.getElementById(tabId + '-items').classList.add('active');
+            });
+        });
+
+        // Загрузка инвентаря
+        function loadInventory() {
+            const user = JSON.parse(localStorage.getItem('codeWarriorCurrentUser'));
+            const inventory = user?.inventory || [];
+            
+            // Обновляем статистику
+            document.getElementById('total-items').textContent = inventory.length + ' предметов';
+            
+            // Если инвентарь пуст
+            if (inventory.length === 0) {
+                document.getElementById('empty-inventory').style.display = 'flex';
+                return;
+            }
+            
+            // Сортируем по типу
+            const itemsByType = {
+                all: inventory,
+                hints: inventory.filter(item => item.type === 'hint'),
+                boosters: inventory.filter(item => item.type === 'booster'),
+                cosmetics: inventory.filter(item => item.type === 'cosmetic'),
+                fun: inventory.filter(item => item.type === 'fun')
+            };
+            
+            // Отображаем предметы по категориям
+            for (const [type, items] of Object.entries(itemsByType)) {
+                const container = document.getElementById(type + '-items');
+                if (container) {
+                    container.innerHTML = '';
+                    
+                    items.forEach(item => {
+                        const itemElement = createItemElement(item);
+                        container.appendChild(itemElement);
+                    });
+                }
+            }
+            
+            // Загружаем активные предметы
+            loadActiveItems();
+        }
+        
+        function createItemElement(item) {
+            const div = document.createElement('div');
+            div.className = 'inventory-item';
+            div.innerHTML = `
+                <div class="item-icon">
+                    <i class="fas ${item.icon || 'fa-question'}"></i>
+                </div>
+                <div class="item-info">
+                    <h4>${item.name}</h4>
+                    <p>${item.description || ''}</p>
+                    <div class="item-quantity">Количество: ${item.quantity || 1}</div>
+                </div>
+                <div class="item-actions">
+                    ${item.type === 'booster' ? 
+                        `<button class="btn-primary btn-sm" onclick="activateItem('${item.id}')">
+                            <i class="fas fa-play"></i> Активировать
+                        </button>` : 
+                        item.type === 'cosmetic' ?
+                        `<button class="btn-primary btn-sm" onclick="equipItem('${item.id}')">
+                            <i class="fas fa-check"></i> Надеть
+                        </button>` :
+                        `<button class="btn-secondary btn-sm" onclick="useItem('${item.id}')">
+                            <i class="fas fa-info"></i> Подробнее
+                        </button>`
+                    }
+                </div>
+            `;
+            return div;
+        }
+        
+        function loadActiveItems() {
+            const user = JSON.parse(localStorage.getItem('codeWarriorCurrentUser'));
+            const activeItems = user?.activeItems || [];
+            const container = document.getElementById('active-items');
+            
+            if (!activeItems.length) {
+                container.innerHTML = '<p class="text-muted">Нет активных предметов</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            activeItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'active-item';
+                div.innerHTML = `
+                    <i class="fas ${item.icon}"></i>
+                    <span>${item.name}</span>
+                    <small>Осталось: ${item.duration} ${item.unit || 'игр'}</small>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        // Активация предмета
+        function activateItem(itemId) {
+            const user = JSON.parse(localStorage.getItem('codeWarriorCurrentUser'));
+            if (!user) return;
+            
+            const itemIndex = user.inventory.findIndex(item => item.id === itemId);
+            if (itemIndex === -1) return;
+            
+            const item = user.inventory[itemIndex];
+            
+            // Уменьшаем количество или удаляем
+            if (item.quantity > 1) {
+                item.quantity--;
+            } else {
+                user.inventory.splice(itemIndex, 1);
+            }
+            
+            // Добавляем в активные
+            if (!user.activeItems) user.activeItems = [];
+            user.activeItems.push({
+                ...item,
+                duration: item.duration || 1,
+                activatedAt: new Date().toISOString()
+            });
+            
+            localStorage.setItem('codeWarriorCurrentUser', JSON.stringify(user));
+            loadInventory();
+            
+            alert(`Усиление "${item.name}" активировано!`);
+        }
+        
+        // Использование предмета (например, подсказки)
+        function useItem(itemId) {
+            alert('Предмет можно использовать во время игры');
+        }
+        
+        // Надеть косметику
+        function equipItem(itemId) {
+            const user = JSON.parse(localStorage.getItem('codeWarriorCurrentUser'));
+            if (!user) return;
+            
+            const item = user.inventory.find(item => item.id === itemId);
+            if (!item) return;
+            
+            user.equippedCosmetic = item.id;
+            localStorage.setItem('codeWarriorCurrentUser', JSON.stringify(user));
+            
+            alert(`Косметика "${item.name}" надета!`);
+        }
+        
+        // Загружаем инвентарь при загрузке страницы
+        document.addEventListener('DOMContentLoaded', loadInventory);
+    </script>
+</body>
+</html>
